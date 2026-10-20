@@ -13,10 +13,7 @@ app.command("/goofy-goober-ping", async ({ command, ack, respond }) => {
   const start = Date.now();
   await ack();
   const latency = Date.now() - start;
-  await respond({
-    response_type: "in_channel",
-    text: `Pong!\nLatency: ${latency}ms`
-  });
+  await respond({response_type: "in_channel", text: `Pong!\nLatency: ${latency}ms`});
 });
 
 app.command("/goofy-goober-help", async ({ ack, respond }) => {
