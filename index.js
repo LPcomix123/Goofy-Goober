@@ -24,7 +24,8 @@ app.command("/goofy-goober-help", async ({ ack, respond }) => {
 /goofy-goober-help - Show this menu,
 /goofy-goober-ping - Check bot latency,
 /goofy-goober-catfact - Get a cat fact,
-/goofy-goober-joke - Get a joke,`
+/goofy-goober-joke - Get a joke,
+/hi - Say hello`
   });
 });
 
