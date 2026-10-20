@@ -26,9 +26,24 @@ app.command("/goofy-goober-help", async ({ ack, respond }) => {
 /goofy-goober-ping - Check bot latency,
 /goofy-goober-catfact - Get a cat fact,
 /goofy-goober-joke - Get a joke,
-/goofy-goober-ranfact - Get a random fact,`
+/goofy-goober-ranfact - Get a random fact,
+/goofy-goober-quote - Get a random quote`
   });
 });
+
+app.command("/goofy-goober-quote", async ({ ack, respond }) => {
+  await ack();
+  
+  try {
+    const response = await axios.get("https://api.quotable.io/quotes/random")
+    const quote = response.data.content
+    const author = response.data.author
+    await respond({ text: `${quote}\n by: ${author}` });
+  } catch (err) {
+    await respond({ text: "Failed to fetch a quote.", err })
+  }
+});
+  
 
 app.command("/goofy-goober-catfact", async ({ ack, respond }) => {
   await ack();
@@ -74,4 +89,16 @@ app.command("/goofy-goober-ranfact", async ({ ack, respond }) => {
 (async () => {
   await app.start();
   console.log("bot is running!");
+
+  cron.schedule("26 20 * * *", async () => {
+    try {
+      await app.client.chat.postMessage({
+        channel: process.env.SLACK_CHANNEL_ID,
+        text: "Good morning!"
+      });
+    } catch (err) {
+      console.error("Scheduled post failed:", err);
+    }
+  }, {timezone: "Europe/London"
+  });
 })();
