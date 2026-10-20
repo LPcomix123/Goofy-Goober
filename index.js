@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const axios = require("axios");
 const { App } = require("@slack/bolt");
+const cron = require("node-cron");
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -25,7 +26,7 @@ app.command("/goofy-goober-help", async ({ ack, respond }) => {
 /goofy-goober-ping - Check bot latency,
 /goofy-goober-catfact - Get a cat fact,
 /goofy-goober-joke - Get a joke,
-/hi - Say hello`
+/goofy-goober-ranfact - Get a random fact,`
   });
 });
 
@@ -53,6 +54,20 @@ ${response.data.punchline}`
     });
   } catch (err) {
     await respond({ text: "Failed to fetch a joke." });
+  }
+});
+
+app.command("/goofy-goober-ranfact", async ({ ack, respond }) => {
+  await ack();
+
+  try {
+    const response = await axios.get("https://uselessfacts.jsph.pl//api/v2/facts/random");
+    const text = response.data.text
+    const sourceurl = response.data.source_url
+    const source = response.data.source
+    await respond({ text: `${response.data.text}\nSource: <${sourceurl}|${source}>` });
+  } catch (err) {
+      await respond({ text: "Failed to fetch a random fact." });
   }
 });
 
