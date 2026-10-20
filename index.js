@@ -10,6 +10,7 @@ const app = new App({
 });
 
 app.command("/goofy-goober-ping", async ({ command, ack, respond }) => {
+  response_type: "in_channel";
   const start = Date.now();
   await ack();
   const latency = Date.now() - start;
