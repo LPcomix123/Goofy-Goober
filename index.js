@@ -14,7 +14,7 @@ app.command("/goofy-goober-ping", async ({ command, ack, respond }) => {
   const start = Date.now();
   await ack();
   const latency = Date.now() - start;
-  await respond({response_type: "in_channel", text: `Pong!\nLatency: ${latency}ms`});
+  await respond({ text: `Pong!\nLatency: ${latency}ms`});
 });
 
 app.command("/goofy-goober-help", async ({ ack, respond }) => {
@@ -27,23 +27,53 @@ app.command("/goofy-goober-help", async ({ ack, respond }) => {
 /goofy-goober-catfact - Get a cat fact,
 /goofy-goober-joke - Get a joke,
 /goofy-goober-ranfact - Get a random fact,
-/goofy-goober-quote - Get a random quote`
+/goofy-goober-quote - Get a random quote,
+/goofy-goober-wotd - Get the word of the day and it's definition,
+/goofy-goober-riddle - Get a random riddle,`
   });
+});
+
+app.command("/goofy-goober-riddle", async ({ ack, respond }) => {
+  await ack();
+
+  try {
+    const response = await axios.get("https://riddles-api.vercel.app/random");
+    const riddle = response.data.riddle;
+    const ans = response.data.answer;
+    await respond({ text: `${riddle}\n\nAnswer: ${ans}` });
+  } catch (err) {
+    console.error("Error fetching riddle:", err);
+    await respond({ text: "Failed to fetch a riddle." });
+  }
 });
 
 app.command("/goofy-goober-quote", async ({ ack, respond }) => {
   await ack();
   
   try {
-    const response = await axios.get("https://api.quotable.io/quotes/random")
-    const quote = response.data.content
-    const author = response.data.author
-    await respond({ text: `${quote}\n by: ${author}` });
+    const response = await axios.get("https://dummyjson.com/quotes/random")
+    const quote = response.data.quote;
+    const author = response.data.author;
+    await respond({ text: `${quote}\nBy: ${author}` });
   } catch (err) {
-    await respond({ text: "Failed to fetch a quote.", err })
+    console.error("Error fetching quote:", err);
+    await respond({ text: "Failed to fetch a quote.", err });
   }
 });
-  
+
+app.command("/goofy-goober-wotd", async ({ ack, respond }) => {
+  await ack();
+
+  try {
+    const response = await axios.get("https://api.wotd.site/query");
+    const word = response.data.word;
+    const def = response.data.definition;
+    await respond({ text: `Word of the Day:\n${word}\nWhich means:\n${def}` });
+  } catch (err) {
+    console.error("Error fetching word of the day:", err);
+    await respond({ text: "Failed to fetch the word of the day." });
+  }
+});
 
 app.command("/goofy-goober-catfact", async ({ ack, respond }) => {
   await ack();
@@ -80,7 +110,7 @@ app.command("/goofy-goober-ranfact", async ({ ack, respond }) => {
     const text = response.data.text
     const sourceurl = response.data.source_url
     const source = response.data.source
-    await respond({ text: `${response.data.text}\nSource: <${sourceurl}|${source}>` });
+    await respond({ text: `${text}\nSource: <${sourceurl}|${source}>` });
   } catch (err) {
       await respond({ text: "Failed to fetch a random fact." });
   }
