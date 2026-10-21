@@ -47,6 +47,6 @@ Everyday at 6am (london/europe) this bot sends a message in the slack "#bots-spa
 (todays fact from api)
 
 
-(italics:) Powered by Goofy Goober,
+_Powered by The Goofy Engine™_
 
-(italics:) Built by @LPcomix123 on hackclub, in javascript.
+_Built by @LPcomix123 on hackclub, to learn javascript and slack bolt and node.js._

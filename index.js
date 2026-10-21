@@ -54,7 +54,7 @@ app.command("/goofy-goober-quote", async ({ ack, respond }) => {
     const response = await axios.get("https://dummyjson.com/quotes/random")
     const quote = response.data.quote;
     const author = response.data.author;
-    await respond({ text: `${quote}\nBy: ${author}` });
+    await respond({ text: `${quote}\n -${author}` });
   } catch (err) {
     console.error("Error fetching quote:", err);
     await respond({ text: "Failed to fetch a quote.", err });
@@ -120,11 +120,142 @@ app.command("/goofy-goober-ranfact", async ({ ack, respond }) => {
   await app.start();
   console.log("bot is running!");
 
-  cron.schedule("26 20 * * *", async () => {
+  cron.schedule("2 22 * * *", async () => {
     try {
+      const response = await axios.get("https://uselessfacts.jsph.pl//api/v2/facts/today");
+      const text = response.data.text
+      const sourceurl = response.data.source_url
+      const source = response.data.source
+      const wotdresponse = await axios.get("https://api.wotd.site/query");
+      const word = wotdresponse.data.word;
+      const def = wotdresponse.data.definition;
+      const riddleresponse = await axios.get("https://riddles-api.vercel.app/random");
+      const riddle = riddleresponse.data.riddle;
+      const ans = riddleresponse.data.answer;
+      const jokeresponse = await axios.get("https://official-joke-api.appspot.com/random_joke")
+      const setup = jokeresponse.data.setup;
+      const punchline = jokeresponse.data.punchline;
+      const quoteresponse = await axios.get("https://dummyjson.com/quotes/random")
+      const quote = quoteresponse.data.quote;
+      const author = quoteresponse.data.author;
+      const fulldate = new Date;
+      const day = fulldate.getDate();
+      const month = fulldate.getMonth();
+      const year = fulldate.getFullYear();
       await app.client.chat.postMessage({
         channel: process.env.SLACK_CHANNEL_ID,
-        text: "Good morning!"
+        blocks: [
+          {
+            type: "header",
+            text: {
+              type: "plain_text",
+              text: `🗞️ Goofy Goober DAILY REPORT:`
+            }
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `${day}/${month + 1}/${year}`
+            }
+          },
+          {
+            type: "divider"
+          },
+          {
+            type: "header",
+            text: {
+              type: "plain_text",
+              text: "💬 Quote of the day:"
+            }
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `${quote}\n -${author}`
+            }
+          },
+          {
+            type: "divider"
+          },
+          {
+            type: "header",
+            text: {
+              type: "plain_text",
+              text: "😂 Joke of the day:"
+            }
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `${setup}\n\n${punchline}`
+            }
+          },
+          {
+            type: "divider"
+          },
+          {
+            type: "header",
+            text: {
+              type: "plain_text",
+              text: "🧩 Riddle of the day:"
+            }
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `${riddle}\n\n\n${ans}`
+            }
+          },
+          {
+            type: "divider"
+          },
+          {
+            type: "header",
+            text: {
+              type: "plain_text",
+              text: "📚 Word of the day:"
+            }
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `${word}\n\n${def}`
+            }
+          },
+          {
+            type: "divider"
+          },
+          {
+            type: "header",
+            text: {
+              type: "plain_text",
+              text: "🧠 Fact of the day"
+            }
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `${text}\n\n<${sourceurl}|${source}>`
+            }
+          },
+          {
+            type: "divider"
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `_Powered by The Goofy Engine™_\n\n_Built by @LPcomix123 on hackclub, to learn javascript and slack bolt and node.js._`
+            }
+          }
+
+        ]
       });
     } catch (err) {
       console.error("Scheduled post failed:", err);
