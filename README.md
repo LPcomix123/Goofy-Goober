@@ -17,37 +17,36 @@ Goofy Goober is my first ever slack bot made using node.js and a hackclub Starda
 
 Everyday at 6am (london/europe) this bot sends a message in the slack "#bots-spam" channel, it will follow this format:
 
-🗞️ Goofy Goober DAILY REPORT:
+## 🗞️ Goofy Goober DAILY REPORT:
 
 (date using const d = new Date)
 
 -
 
-Quote of the day:
+## Quote of the day:
 
 (quote from api)
 
 -
 
-Joke of the day:
+## Joke of the day:
 
 (joke from api)
 
 -
 
-Riddle of the day:
+## Riddle of the day:
 
 (riddle from api)
 
 -
-
-Word of the day:
+## Word of the day:
 
 (word of the day from wotd api)
 
 -
 
-Fact of the day:
+## Fact of the day:
 
 (todays fact from api)
 
