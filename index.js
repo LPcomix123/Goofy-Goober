@@ -120,7 +120,7 @@ app.command("/goofy-goober-ranfact", async ({ ack, respond }) => {
   await app.start();
   console.log("bot is running!");
 
-  cron.schedule("2 22 * * *", async () => {
+  cron.schedule("0 6 * * *", async () => {
     try {
       const response = await axios.get("https://uselessfacts.jsph.pl//api/v2/facts/today");
       const text = response.data.text
